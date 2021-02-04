@@ -11,6 +11,8 @@ const templateEl = document.querySelector('.template');
 const addButtonEl = document.querySelector('.button_add');
 const inputEl = document.querySelector('.input');
 
+let editing;
+
 
 function render() {
     const html = TODO_LIST
@@ -43,6 +45,9 @@ function getItem(item) {
     const duplicateBtn = newItem.querySelector('.button_duplicate');
     duplicateBtn.addEventListener('click', handleDuplicate);
 
+    const editBtn = newItem.querySelector('.button_edit');
+    editBtn.addEventListener('click', handleEdit);
+
     return newItem;
 }
 
@@ -66,6 +71,33 @@ function handleDuplicate(event) {
     const title = headerEl.textContent;
     const newItem = getItem({title});
     targetItem.after(newItem);
+}
+
+function handleEdit(event) {
+    const targetEl = event.target;
+    editing = targetEl.closest('.card');
+    inputEl.value = editing.querySelector('.card__title').textContent;
+
+    addButtonEl.classList.remove('button_add');
+    addButtonEl.classList.add('button_edit');
+
+    addButtonEl.removeEventListener('click', handleAdd);
+    addButtonEl.addEventListener('click', handleEditConfirm);
+}
+
+
+function handleEditConfirm() {
+    editing.querySelector('.card__title').textContent = inputEl.value;
+
+    addButtonEl.classList.remove('button_edit');
+    addButtonEl.classList.add('button_add');
+
+    inputEl.value = ''
+
+    addButtonEl.removeEventListener('click', handleEditConfirm);
+    addButtonEl.addEventListener('click', handleAdd);
+
+    editing = null;
 }
 
 addButtonEl.addEventListener('click', handleAdd);
