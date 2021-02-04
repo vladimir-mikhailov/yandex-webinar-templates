@@ -37,6 +37,9 @@ function getItem(item) {
     const headerEl = newItem.querySelector('.card__title');
     headerEl.textContent = item.title;
 
+    const removeBtn = newItem.querySelector('.button_remove');
+    removeBtn.addEventListener('click', handleDelete);
+
     return newItem;
 }
 
@@ -45,6 +48,12 @@ function handleAdd() {
     const listItem = getItem({title: inputText});
     listContainerEl.prepend(listItem);
     inputEl.value = ''
+}
+
+function handleDelete(event) {
+    const targetEl = event.target;
+    const targetItem = targetEl.closest('.card');
+    targetItem.remove();
 }
 
 addButtonEl.addEventListener('click', handleAdd);
